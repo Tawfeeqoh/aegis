@@ -1,0 +1,117 @@
+{
+  "network": "testnet",
+  "contract": "treasury.aegis-hack10-261106.testnet",
+  "capturedAt": "2026-11-07T16:51:06.441Z",
+  "config": {
+    "blockHeight": 276658115,
+    "value": {
+      "owner": "aegis-hack10-261106.testnet",
+      "policy": {
+        "version": 1,
+        "daily": "1000000000000000000000000",
+        "per_payment": "1000000000000000000000000",
+        "approval_above": "250000000000000000000000",
+        "recipients": [
+          "vendor.aegis-hack10-261106.testnet"
+        ],
+        "ttl_seconds": 1800
+      },
+      "paused": false,
+      "accounted_balance": "1880000000000000000000000",
+      "network_note": "NEAR native asset; amounts are yoctoNEAR",
+      "requests": 4
+    }
+  },
+  "requests": {
+    "blockHeight": 276658115,
+    "value": [
+      {
+        "id": "agent.aegis-hack10-261106.testnet:demo-1793973578246",
+        "agent": "agent.aegis-hack10-261106.testnet",
+        "recipient": "vendor.aegis-hack10-261106.testnet",
+        "amount": "120000000000000000000000",
+        "reference": "demo-1793973578246",
+        "memo": "AEGIS testnet compute purchase",
+        "fingerprint": "7ff20eb86f67597ab4f42a9e1da7fc9a86af16703f4d4c25f0ae0b085e6f6a18",
+        "policy_version": 1,
+        "created": 1793973594909386000,
+        "expires": 1793975394909386000,
+        "settled_at": 1793973596135696600,
+        "status": "Settled",
+        "reason": "Transfer receipt succeeded"
+      },
+      {
+        "id": "agent.aegis-hack10-261106.testnet:demo-1793973578246-injection",
+        "agent": "agent.aegis-hack10-261106.testnet",
+        "recipient": "aegis-hack10-261106.testnet",
+        "amount": "120000000000000000000000",
+        "reference": "demo-1793973578246-injection",
+        "memo": "AEGIS testnet compute purchase",
+        "fingerprint": "6d3f56fab6a0b93a016765b868e98d9a6adf51a663d2fbf359662cf695d41c89",
+        "policy_version": 1,
+        "created": 1793973621763279600,
+        "expires": 1793975421763279600,
+        "settled_at": null,
+        "status": "Blocked",
+        "reason": "Recipient not approved"
+      },
+      {
+        "id": "agent.aegis-hack10-261106.testnet:reference-owner",
+        "agent": "agent.aegis-hack10-261106.testnet",
+        "recipient": "vendor.aegis-hack10-261106.testnet",
+        "amount": "600000000000000000000000",
+        "reference": "reference-owner",
+        "memo": "AEGIS testnet compute purchase",
+        "fingerprint": "728d71d78763b6b840ea0373145bdcefdddf93549cfab7ae0dc852c2b8bf33f4",
+        "policy_version": 1,
+        "created": 1793973631935004700,
+        "expires": 1793975431935004700,
+        "settled_at": null,
+        "status": "Approval",
+        "reason": "Awaiting exact owner approval"
+      },
+      {
+        "id": "research.aegis-hack10-261106.testnet:demo-1793973578246-race",
+        "agent": "research.aegis-hack10-261106.testnet",
+        "recipient": "vendor.aegis-hack10-261106.testnet",
+        "amount": "600000000000000000000000",
+        "reference": "demo-1793973578246-race",
+        "memo": "AEGIS testnet compute purchase",
+        "fingerprint": "1fdcd8cc03b3ebe047da38e118d3e488ae9ec8b93243834120a82a1ce62e695f",
+        "policy_version": 1,
+        "created": 1793973645917680600,
+        "expires": 1793975445917680600,
+        "settled_at": null,
+        "status": "Blocked",
+        "reason": "Shared 24-hour budget exceeded"
+      }
+    ]
+  },
+  "transactions": [
+    {
+      "label": "First permitted request",
+      "hash": "3uPZKQi7WyMXR9z4h3KbDWCX9LPBJ6ft2UTw7mRYkWn6"
+    },
+    {
+      "label": "Identical retry",
+      "hash": "AXLo1GzKYGpUh1qdBuhcZAy6z2sTbbhPpj7WgLVoBzBW"
+    },
+    {
+      "label": "Substituted recipient blocked",
+      "hash": "AboEAsinGUWMQLwVq2Jg8tdNhhoMWumpTyUfaMwGyK1U"
+    },
+    {
+      "label": "Owner approval requested",
+      "hash": "ZVsHi9AGMaFwmsbqXzL8MyZ6SyYWCs8JUBMW7Gwst7b"
+    },
+    {
+      "label": "Shared budget blocked",
+      "hash": "8W2TkdMBxNjP9cgGAVxx3Gi3xLnzpaUCbiVbhxxMsNVV"
+    }
+  ],
+  "notes": [
+    "The demo contract is a previously deployed testnet instance. A fresh local build may differ in compiler metadata and is not claimed to match its bytecode.",
+    "The original administrative demo keys are not distributed. Deploy your own instance to control owner actions.",
+    "Expired approval rows can remain stored as Approval until a cleanup transaction. The contract refuses their execution."
+  ]
+}
