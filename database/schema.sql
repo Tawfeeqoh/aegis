@@ -28,3 +28,5 @@ begin
 end;$$;
 revoke all on function public.aegis_gateway(text,text,text,jsonb,bigint,text,text,bigint) from public;
 grant execute on function public.aegis_gateway(text,text,text,jsonb,bigint,text,text,bigint) to anon;
+
+revoke all on function public.aegis_gateway(text,text,text,jsonb,bigint,text,text,bigint) from authenticated;

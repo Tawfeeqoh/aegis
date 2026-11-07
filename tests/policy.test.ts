@@ -1,0 +1,11 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {UNIT,amount,createWorkspace,request,approve,policy,usage,lab} from '../lib/engine.ts';
+const base={agent:'procurement',recipient:'compute.testnet',amount:'12',reference:'invoice-101'};
+test('all twelve isolated attack checks pass',async()=>{const r=await lab();assert.equal(r.length,12);for(const x of r)assert.ok(x.passed,x.title);});
+test('amount parser rejects signs, exponents, excess precision and zero',()=>{for(const x of ['-1','1e2','NaN','0','1.0000001','01',' 1'])assert.throws(()=>amount(x));assert.equal(amount('0.000001'),1);});
+test('agent cannot impersonate another identity',async()=>{const s=await createWorkspace();await assert.rejects(request(s,base,'research'),/only request its own/);assert.equal(s.balance,500*UNIT);});
+test('a lower policy keeps previous spending counted',async()=>{const s=await createWorkspace();await request(s,base);await policy(s,{daily:'20',perPayment:'20',approvalAbove:'10',ttlMinutes:30,recipients:s.policy.recipients});assert.equal(usage(s),12*UNIT);const r=await request(s,{...base,reference:'two',amount:'9'});assert.equal(r.payment.status,'blocked');});
+test('agent cannot approve its own request',async()=>{const s=await createWorkspace();const r=await request(s,{...base,amount:'30'});await assert.rejects(approve(s,r.payment.id,r.payment.fingerprint,true,'procurement'),/Only the owner/);});
+test('revocation also blocks a previously pending approval',async()=>{const s=await createWorkspace();const r=await request(s,{...base,amount:'30'});s.agents[0].active=false;await assert.rejects(approve(s,r.payment.id,r.payment.fingerprint,true),/paused/);assert.equal(s.balance,500*UNIT);});
+test('rejecting an approval releases its reservation',async()=>{const s=await createWorkspace();const r=await request(s,{...base,amount:'30'});assert.equal(usage(s),30*UNIT);await approve(s,r.payment.id,r.payment.fingerprint,false);assert.equal(usage(s),0);});
+test('same reference with altered amount never debits',async()=>{const s=await createWorkspace();await request(s,base);const r=await request(s,{...base,amount:'15'});assert.equal(r.conflict,true);assert.equal(s.balance,488*UNIT);});
