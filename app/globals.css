@@ -468,7 +468,6 @@ td code {font-size: 10px; color: var(--faint);}
 @keyframes breathe {to {opacity: .4;}}
 [data-input=keyboard] .view-body, [data-input=keyboard] .modal {animation: none; transition: none;}
 [data-input=keyboard] .modal-backdrop,[data-input=keyboard] .mobile-drawer,[data-input=keyboard] .nav-backdrop {transition: none;}
-[data-large-text=true] {zoom: 2;}
 @media (hover:hover) and (pointer:fine) {
   a:hover {text-decoration: underline;}
   .btn:hover:not(:disabled) {background: #e1f6f214; border-color: #e1f6f244;}

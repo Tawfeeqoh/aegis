@@ -17,7 +17,7 @@ const nav = [['Overview', LayoutDashboard], ['Agents', Fingerprint], ['Payments'
 const descriptions: Record<View, string> = {Overview: 'Agent spending, approvals, and the budget left to use.', Agents: 'Set a budget. Give each agent only the access it needs.', Payments: 'Review requests and the rules behind each decision.', Policies: 'Set the limits every agent must follow.', 'Attack lab': 'Test the rules with requests designed to break them.', 'Audit log': 'A record of each request, decision, and policy change.', Developer: 'Connect your agent or inspect the NEAR testnet contract.'};
 const fromHash = () => nav.find(([name]) => name.toLowerCase().replaceAll(' ', '-') === location.hash.slice(1))?.[0] ?? 'Overview';
 
-export default function Aegis({fixture,largeText=false}:{fixture?:string;largeText?:boolean}) {
+export default function Aegis({fixture}:{fixture?:string}) {
   const [s, setS] = useState<Workspace | null>(null);
   const [view, setView] = useState<View>('Overview');
   const [busy, setBusy] = useState('');
@@ -50,7 +50,6 @@ export default function Aegis({fixture,largeText=false}:{fixture?:string;largeTe
     finally {if (ticket === generation.current) {setLoaded(true); setRefreshing(false);}}
   }, [fixture]);
   useEffect(() => {
-    if (largeText) document.documentElement.dataset.largeText='true';
     load(); setView(fromHash());
     const sync = () => setView(fromHash());
     const onFocus = () => {if (document.visibilityState === 'visible') load();};
