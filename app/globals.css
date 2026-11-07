@@ -130,11 +130,12 @@ label small, .field-note {font-size: 12px; color: var(--muted); line-height: 1.6
 .balance-context {display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted);}
 .balance-context .dot {width: 4px; height: 4px;}
 .balance-facts {display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--rule);}
+.balance-facts[data-long=true] {grid-template-columns: 1fr; gap: 13px;}
 .balance-facts>div>span {display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px;}
 .balance-facts strong {font-size: 18px; font-weight: 400; font-variant-numeric: tabular-nums;}
 .balance-facts small {color: var(--faint); font-size: 10px; margin-left: 6px;}
 .budget-block {margin-top: 23px;}
-.budget-caption {display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; color: #c0d2c6; font-variant-numeric: tabular-nums;}
+.budget-caption {display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 10px; font-size: 11px; color: #c0d2c6; font-variant-numeric: tabular-nums;}
 .budget-caption small {font-size: 11px; color: var(--faint);}
 .budget-caption>span:last-child {white-space: nowrap;}
 .budget-track, .mini-track {height: 5px; background: #e1f6f214; border-radius: 4px; overflow: hidden; margin: 11px 0 0;}
@@ -145,7 +146,8 @@ label small, .field-note {font-size: 12px; color: var(--muted); line-height: 1.6
 .segmented {display: inline-flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid var(--rule); border-radius: 8px; background: #07171744; width: fit-content;}
 .segmented button {border: 1px solid transparent; border-radius: 5px; min-height: 27px; padding: 4px 10px; font-size: 10px; color: var(--muted); background: transparent; white-space: nowrap;}
 .segmented button[aria-pressed=true] {background: #d4f5e612; color: var(--text); border-color: #d4f5e612;}
-.chart-headline {display: flex; align-items: baseline; gap: 15px; margin-top: 15px; font-variant-numeric: tabular-nums;}
+.chart-headline {display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 15px; margin-top: 15px; font-variant-numeric: tabular-nums;}
+.chart-headline[data-long=true] strong {font-size: 24px;}
 .chart-headline strong {font-size: 29px; line-height: 1.2; font-weight: 400; letter-spacing: -1px;}
 .chart-headline strong small {font-size: 11px; margin-left: 7px; color: var(--faint); letter-spacing: 0;}
 .chart-headline>span {font-size: 11px; color: var(--faint);}
@@ -465,6 +467,7 @@ td code {font-size: 10px; color: var(--faint);}
 @keyframes view-enter {from {opacity: 0; transform: translateY(5px);} to {opacity: 1; transform: translateY(0);}}
 @keyframes breathe {to {opacity: .4;}}
 [data-input=keyboard] .view-body, [data-input=keyboard] .modal {animation: none; transition: none;}
+[data-input=keyboard] .modal-backdrop,[data-input=keyboard] .mobile-drawer,[data-input=keyboard] .nav-backdrop {transition: none;}
 [data-large-text=true] {zoom: 2;}
 @media (hover:hover) and (pointer:fine) {
   a:hover {text-decoration: underline;}
