@@ -10,18 +10,22 @@
     "test": "node --experimental-transform-types --test tests/*.ts"
   },
   "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "@near-wallet-selector/core": "10.1.4",
+    "@near-wallet-selector/my-near-wallet": "10.1.4",
+    "@number-flow/react": "^0.6.2",
+    "cmdk": "^1.1.1",
+    "lucide-react": "^1.31.0",
+    "near-api-js": "7.4.0",
     "next": "16.3.4",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "lucide-react": "^1.31.0",
-    "@near-wallet-selector/core": "10.1.4",
-    "@near-wallet-selector/my-near-wallet": "10.1.4",
-    "near-api-js": "7.4.0"
+    "sonner": "^2.0.8"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3"
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
   }
 }
