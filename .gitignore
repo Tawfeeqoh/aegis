@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.vercel/
+.env*
+!.env.example
+**/target/
+*.tsbuildinfo
+next-env.d.ts
+outputs/
+*.pem
