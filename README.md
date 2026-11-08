@@ -6,7 +6,7 @@ An agent can ask to pay a vendor. It shouldn't be able to decide its own spendin
 
 AEGIS puts the owner's rules between an agent and a payment. Set a budget, choose who the agent can pay, and decide when you need to approve a request. A changed recipient, repeated invoice or revoked agent should never get a free pass because a model says the payment is fine.
 
-[Open AEGIS](https://aegis-agent-security.vercel.app)
+[Open AEGIS](https://aegis-agent-security.vercel.app) · [Documentation](https://aegis-agent-security.vercel.app/docs) · [Workspace](https://aegis-agent-security.vercel.app/app)
 
 ## What works
 

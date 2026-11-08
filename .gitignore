@@ -10,3 +10,5 @@ outputs/
 *.pem
 .local-keys/
 
+
+.taste-skill/

@@ -106,7 +106,7 @@ export default function Aegis({fixture}:{fixture?:string}) {
           {view === 'Audit log' && <AuditLog s={s} busy={!!busy} act={act} select={setSelected}/>}
           {view === 'Connections' && <Connections s={s} act={act} onState={setS} readOnly={!!fixture}/>}
           {view === 'Developer' && <Developer s={s} act={act} busy={!!busy}/>}
-        </div><footer className="page-footer"><span><Mark/>AEGIS<span>Built by HACK1.0</span></span><span>Sandbox ledger · no real funds</span></footer></>}
+        </div><footer className="page-footer"><span><Mark/>AEGIS<span>Built by HACK1.0</span></span><nav aria-label="Workspace resources" className="workspace-resources"><a href="/">Website</a><a href="/docs">Documentation</a></nav><span>Sandbox ledger · no real funds</span></footer></>}
       </main>
     </div>
     <nav className="mobile-bottom-nav" aria-label="Quick navigation">{nav.slice(0, 3).map(([name, Icon]) => <button key={name} aria-current={view === name ? 'page' : undefined} className={view === name ? 'selected' : ''} onClick={() => go(name)}><span><Icon size={21}/>{name === 'Payments' && pending > 0 && <i>{pending}</i>}</span>{name}</button>)}<button className={!['Overview', 'Agents', 'Payments'].includes(view) ? 'selected' : ''} onClick={() => setMenu(true)} aria-label="More navigation"><MoreHorizontal size={22}/>More</button></nav>
