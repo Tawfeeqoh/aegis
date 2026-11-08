@@ -1,0 +1,48 @@
+{
+  "capturedAt": "2026-11-08T15:37:34.526Z",
+  "provider": "NEAR Intents 1Click",
+  "mode": "dry quote only",
+  "note": "Public example addresses. No deposit requested; no funds moved.",
+  "response": {
+    "quote": {
+      "amountIn": "1000000000000000000000000",
+      "amountInFormatted": "1.0",
+      "amountInUsd": "3.700000000000",
+      "minAmountIn": "1000000000000000000000000",
+      "amountOut": "3686273",
+      "amountOutFormatted": "3.686273",
+      "amountOutUsd": "3.684193942028",
+      "minAmountOut": "3649410",
+      "timeEstimate": 24,
+      "refundFee": "0",
+      "withdrawFee": "2400"
+    },
+    "quoteRequest": {
+      "dry": true,
+      "depositMode": "SIMPLE",
+      "swapType": "EXACT_INPUT",
+      "slippageTolerance": 100,
+      "originAsset": "nep141:wrap.near",
+      "depositType": "ORIGIN_CHAIN",
+      "destinationAsset": "nep141:base-0x833589fcd6edb6e08f4c7c32d4f71b54bda02913.omft.near",
+      "amount": "1000000000000000000000000",
+      "refundTo": "owner.near",
+      "refundType": "ORIGIN_CHAIN",
+      "recipient": "0x1111111111111111111111111111111111111111",
+      "recipientType": "DESTINATION_CHAIN",
+      "deadline": "2026-11-08T15:52:29.197Z",
+      "confidentiality": "public",
+      "quoteWaitingTimeMs": 0,
+      "insured": false,
+      "appFees": [
+        {
+          "recipient": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+          "fee": 20
+        }
+      ]
+    },
+    "signature": "ed25519:3s8wrcwUtU8Bi4pdkX85p9EB8Xg3K2muoPNqgpseccUj956sT3hjy2yENUL1UEn1p3xcmr5mQ9eJtKMmfQQaJKjY",
+    "timestamp": "2026-11-08T15:37:34.046Z",
+    "correlationId": "8991e167-2a96-4c1b-9c9b-4ecceda89c0c"
+  }
+}

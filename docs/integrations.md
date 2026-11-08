@@ -13,6 +13,7 @@ Updated 8 November 2026. The root README is the short introduction; this file re
 ## Evidence
 
 - `public/evidence/testnet.json`: native treasury requests and transaction hashes.
+- `public/evidence/intents.json`: live preview quote; no deposit or funds moved.
 - `public/evidence/chain-signatures.json`: cross-chain requests, owner/MPC transaction and signature verification.
 - `scripts/verify-storage.ts`: isolated database checks.
 - `tests/integrations.test.ts`: risk authority boundary, provider failures, integer units, quote binding, budget reservations, USDC receipts and chain-bound payloads.
