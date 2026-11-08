@@ -1,6 +1,7 @@
 import {workspaceId,mutate,read,rpc} from '@/lib/store';
 import {AegisError,amount,request,approve,policy,audit,expire,lab,verify,hash} from '@/lib/engine';
 import {randomBytes} from 'node:crypto';
+import {governedPayment} from '@/lib/governed-payment';
 export const dynamic='force-dynamic';export const maxDuration=60;
 const json=(x:unknown,status=200)=>Response.json(x,{status,headers:{'Cache-Control':'no-store'}});
 const fail=(e:unknown)=>json({error:e instanceof AegisError?e.code:'invalid_request',message:e instanceof AegisError?e.message:e instanceof SyntaxError?'Invalid request body.':'The operation could not be completed. Please retry.'},e instanceof AegisError?e.status:400);
@@ -14,8 +15,9 @@ export async function POST(req:Request){try{
   return json(await mutate(id,async s=>{s.lab={time:now,results};await audit(s,'owner','lab.completed',`${results.filter(x=>x.passed).length}/${results.length} isolated checks passed, including concurrent database writes.`,now);return s.lab;}));
  }
  if(data.action==='credential'){const {state}=await read(id);if(!state.agents.some(a=>a.id===data.agent&&a.active))throw new AegisError('agent','Choose an active agent.');const token=`aegis_${randomBytes(32).toString('hex')}`,expires=now+7*86_400_000;await rpc('credential_create',{p_workspace:id,p_digest:await hash(token),p_agent:data.agent,p_expires:expires});const result=await mutate(id,async s=>audit(s,'owner','credential.issued',`Seven-day scoped credential issued for ${data.agent}.`,now));return json({...result,token,expires});}
+ if(data.action==='payment')return json(await governedPayment(id,data.payment,'owner'));
  return json(await mutate(id,async s=>{switch(data.action){
-  case 'payment':return request(s,data.payment,'owner',now);
+  case 'risk-mode':{s.riskRequired=data.required===true;await audit(s,'owner','risk.mode_changed',s.riskRequired?'Context reviews enabled; warnings and unavailable reviews require owner approval.':'Context reviews disabled. Deterministic financial rules still apply.',now);return null;}
   case 'approval':return approve(s,data.id,data.fingerprint,data.approve===true,'owner',now);
   case 'policy':await policy(s,data.policy,now);return null;
   case 'pause':s.paused=data.paused===true;await audit(s,'owner',s.paused?'treasury.paused':'treasury.resumed',s.paused?'New execution blocked. Completed transfers cannot be reversed.':'Treasury resumed.',now);return null;
@@ -26,3 +28,4 @@ export async function POST(req:Request){try{
   default:throw new AegisError('action','Unknown action.');
  }}));
  }catch(e){return fail(e);}}
+

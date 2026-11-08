@@ -3,18 +3,19 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {Dialog} from '@base-ui/react/dialog';
 import {Command} from 'cmdk';
 import {Toaster, toast} from 'sonner';
-import {ArrowUpRight, ChevronRight, Code2, Fingerprint, FileCheck2, FlaskConical, LayoutDashboard, LockKeyhole, Menu, MoreHorizontal, Pause, Play, Plus, RefreshCw, Search, Settings2, ShieldAlert, ShieldCheck, X} from 'lucide-react';
+import {ArrowUpRight, ChevronRight, Code2, Fingerprint, FileCheck2, FlaskConical, LayoutDashboard, LockKeyhole, Menu, MoreHorizontal, Pause, Play, Plus, RefreshCw, Search, Settings2, ShieldAlert, ShieldCheck, Plug, X} from 'lucide-react';
 import type {Agent, Payment, Workspace} from '@/lib/engine';
 import {money, paymentStatus, timeOnly} from '@/lib/presentation';
 import {Mark, Modal, Skeleton} from './ui-kit';
 import {AgentForm, Credential, PaymentDetail, PaymentForm, PolicyForm, type Action} from './forms';
 import Overview from './overview';
+import Connections from './connections';
 import {Agents, Payments, AttackLab, AuditLog, Developer} from './views';
 import {fixtureWorkspace} from './qa-fixtures';
 
-export type View = 'Overview' | 'Agents' | 'Payments' | 'Policies' | 'Attack lab' | 'Audit log' | 'Developer';
-const nav = [['Overview', LayoutDashboard], ['Agents', Fingerprint], ['Payments', ArrowUpRight], ['Policies', Settings2], ['Attack lab', FlaskConical], ['Audit log', FileCheck2], ['Developer', Code2]] as const;
-const descriptions: Record<View, string> = {Overview: 'Agent spending, approvals, and the budget left to use.', Agents: 'Set a budget. Give each agent only the access it needs.', Payments: 'Review requests and the rules behind each decision.', Policies: 'Set the limits every agent must follow.', 'Attack lab': 'Test the rules with requests designed to break them.', 'Audit log': 'A record of each request, decision, and policy change.', Developer: 'Connect your agent or inspect the NEAR testnet contract.'};
+export type View = 'Overview' | 'Agents' | 'Payments' | 'Policies' | 'Attack lab' | 'Audit log' | 'Developer' | 'Connections';
+const nav = [['Overview', LayoutDashboard], ['Agents', Fingerprint], ['Payments', ArrowUpRight], ['Policies', Settings2], ['Attack lab', FlaskConical], ['Audit log', FileCheck2], ['Developer', Code2], ['Connections', Plug]] as const;
+const descriptions: Record<View, string> = {Overview: 'Agent spending, approvals, and the budget left to use.', Agents: 'Set a budget. Give each agent only the access it needs.', Payments: 'Review requests and the rules behind each decision.', Policies: 'Set the limits every agent must follow.', 'Attack lab': 'Test the rules with requests designed to break them.', 'Audit log': 'A record of each request, decision, and policy change.', Developer: 'Connect your agent or inspect the NEAR testnet contract.', Connections: 'Risk review, NEAR Intents and Chain Signatures.'};
 const fromHash = () => nav.find(([name]) => name.toLowerCase().replaceAll(' ', '-') === location.hash.slice(1))?.[0] ?? 'Overview';
 
 export default function Aegis({fixture}:{fixture?:string}) {
@@ -103,6 +104,7 @@ export default function Aegis({fixture}:{fixture?:string}) {
           {view === 'Policies' && <PolicyForm key={s.policy.version} s={s} busy={!!busy} save={p => act('policy', {policy: p}, 'Policy saved. Previous pending approvals were invalidated.')}/>}
           {view === 'Attack lab' && <AttackLab s={s} busy={busy} run={lab}/>}
           {view === 'Audit log' && <AuditLog s={s} busy={!!busy} act={act} select={setSelected}/>}
+          {view === 'Connections' && <Connections s={s} act={act} onState={setS}/>}
           {view === 'Developer' && <Developer s={s} act={act} busy={!!busy}/>}
         </div><footer className="page-footer"><span><Mark/>AEGIS<span>Built by HACK1.0</span></span><span>Sandbox ledger · no real funds</span></footer></>}
       </main>
@@ -119,3 +121,4 @@ export default function Aegis({fixture}:{fixture?:string}) {
     <Toaster theme="dark" position="bottom-right" closeButton visibleToasts={3} toastOptions={{className: 'aegis-toast'}}/>
   </div>;
 }
+

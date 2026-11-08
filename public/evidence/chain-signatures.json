@@ -1,0 +1,110 @@
+{
+  "capturedAt": "2026-11-08T15:14:52.527Z",
+  "network": "NEAR testnet",
+  "destination": "Sepolia",
+  "contract": "aegis-chain-mw7yr2zc.testnet",
+  "agent": "agent.aegis-chain-mw7yr2zc.testnet",
+  "transactions": [
+    {
+      "label": "Recipient substitution",
+      "hash": "3TfrbbPvGsqPFHP7AgeJDRU3F1YL1c2ehebpa6u2PesE"
+    },
+    {
+      "label": "Permitted transfer requested",
+      "hash": "tm31Tks5wXmv2WVEPgpmb4zu4aFcwo8YGDk1ahTqmjT"
+    },
+    {
+      "label": "Identical retry",
+      "hash": "FHFrsfdJM3WDufa6coAKBmaErGCjNxW343EQvaLbS4Wt"
+    },
+    {
+      "label": "Owner approval and MPC callback",
+      "hash": "EQrkj9uP5jNauvNTwSP3fFLgK6oR7Y2TFfggnkwcCtzK"
+    }
+  ],
+  "checks": [
+    {
+      "name": "recipient substitution",
+      "passed": true
+    },
+    {
+      "name": "exact owner approval required",
+      "passed": true
+    },
+    {
+      "name": "idempotent retry",
+      "passed": true
+    },
+    {
+      "name": "agent cannot approve",
+      "passed": true
+    },
+    {
+      "name": "MPC signature recovers derived address",
+      "passed": true
+    }
+  ],
+  "notes": [
+    "MPC signature verification is distinct from destination settlement.",
+    "The derived Sepolia account requires test ETH before a transfer can be mined.",
+    "Test administrator and contract upgrade keys remain trusted."
+  ],
+  "publicKey": "secp256k1:bEEz5xUdKMxufUQypJ29yc5snWQjt3qqH1HoQ8EdRe8QjUf5LnrKZuQwdqrnvPm7rRhY19SfgL6yo2n8whDCTSG",
+  "derivedAddress": "0xF497E62A69AC0A49756F8879A5969111B26779d7",
+  "signedRequest": {
+    "id": "agent.aegis-chain-mw7yr2zc.testnet:verify-mw7z48of",
+    "agent": "agent.aegis-chain-mw7yr2zc.testnet",
+    "recipient": "0x1111111111111111111111111111111111111111",
+    "value": "1000000000000",
+    "max_fee_per_gas": "2000000000",
+    "priority_fee": "1000000000",
+    "cost_cap": "43000000000000",
+    "nonce": 1,
+    "reference": "verify-mw7z48of",
+    "fingerprint": "f2098c782771b0bc871a1904ab7d2d686682422995d5fffdb57f1fb11fc39445",
+    "unsigned_tx": "02ef83aa36a701843b9aca00847735940082520894111111111111111111111111111111111111111185e8d4a5100080c0",
+    "payload": [
+      118,
+      179,
+      143,
+      228,
+      185,
+      203,
+      194,
+      216,
+      241,
+      249,
+      239,
+      65,
+      100,
+      187,
+      17,
+      47,
+      87,
+      41,
+      45,
+      168,
+      233,
+      157,
+      195,
+      96,
+      172,
+      183,
+      28,
+      166,
+      167,
+      66,
+      167,
+      45
+    ],
+    "policy_version": 1,
+    "created": 1794150933660515800,
+    "expires": 1794152733660515800,
+    "status": "Signed",
+    "reason": "MPC signature returned. Destination settlement unverified.",
+    "signature": "{\"scheme\":\"Secp256k1\",\"big_r\":{\"affine_point\":\"036724b8049a149bde1f9768d6ef6d3beaad58515b91f678472df4b6c73d1730be\"},\"s\":{\"scalar\":\"0a9857c35836a207c859a249eff2e2f1ee56fc2f293cb620c27d4c3592e7ee4b\"},\"recovery_id\":1}"
+  },
+  "signedTransactionHash": "0xb58f368a6fc49efec2d8bc9c05a10acc821bcc438908e7ea203098f7e38d2f5c",
+  "codeHash": "4S5M7czYFgWQMUeCjM4RNnmTEHnGzCgS9HV5K4hVvh3V",
+  "wasmSHA256": "32ff7ef62633091fa3a9786488b7a6fe7bcfd6ed0116f8089fb03ba606ed22f8"
+}

@@ -1,10 +1,12 @@
+import type {RiskReview} from './near-ai.ts';
+import type {IntentsState} from './intents.ts';
 export const UNIT=1_000_000,DAY=86_400_000;
 export type Agent={id:string;name:string;role:string;active:boolean;daily:number};
-export type Payment={id:string;agent:string;recipient:string;amount:number;reference:string;memo:string;created:number;expires:number;policyVersion:number;fingerprint:string;status:string;reason:string;settled?:number};
+export type Payment={id:string;agent:string;recipient:string;amount:number;reference:string;memo:string;created:number;expires:number;policyVersion:number;fingerprint:string;status:string;reason:string;settled?:number;risk?:RiskReview};
 export type Policy={version:number;daily:number;perPayment:number;approvalAbove:number;recipients:string[];ttlMinutes:number};
 export type Audit={id:string;time:number;actor:string;action:string;detail:string;request:string|null;previous:string;hash:string};
 export type LabResult={id:string;title:string;passed:boolean;expected:string;observed:string};
-export type Workspace={name:string;balance:number;initial:number;paused:boolean;policy:Policy;agents:Agent[];payments:Payment[];audit:Audit[];lab:{time:number;results:LabResult[]}|null;nearContract:string;nearOwner:string};
+export type Workspace={name:string;balance:number;initial:number;paused:boolean;policy:Policy;agents:Agent[];payments:Payment[];audit:Audit[];lab:{time:number;results:LabResult[]}|null;nearContract:string;nearOwner:string;chainContract?:string;intents?:IntentsState;riskRequired?:boolean;riskReviews?:{key:string;created:number;review?:RiskReview}[]};
 export class AegisError extends Error{constructor(public code:string,message:string,public status=400){super(message)}}
 export function amount(value:string){if(typeof value!=="string"||!/^(0|[1-9]\d{0,6})(\.\d{1,6})?$/.test(value))throw new AegisError("invalid_amount","Use a positive amount with up to six decimal places.");const [a,b=""]=value.split(".");const n=Number(a)*UNIT+Number(b.padEnd(6,"0"));if(!Number.isSafeInteger(n)||n<=0)throw new AegisError("invalid_amount","Amount must be positive.");return n;}
 export const decimal=(n:number)=>(n/UNIT).toFixed(6).replace(/0+$/,"").replace(/\.$/,"");
@@ -16,7 +18,7 @@ export async function createWorkspace(now=Date.now()):Promise<Workspace>{const s
 export function usage(s:Workspace,now=Date.now(),agent?:string){return s.payments.filter(p=>(!agent||p.agent===agent)&&((p.status==="settled"&&(p.settled??p.created)>now-DAY)||(p.status==="approval"&&p.expires>now))).reduce((n,p)=>n+p.amount,0);}
 export async function expire(s:Workspace,now=Date.now()){for(const p of s.payments)if(p.status==="approval"&&p.expires<=now){p.status="expired";p.reason="Approval expired; reserved budget released.";await audit(s,"system","payment.expired",p.reason,now,p.id);}}
 function clean(x:any,label:string,max:number,re?:RegExp){if(typeof x!=="string"||!x.trim()||x.length>max||(re&&!re.test(x)))throw new AegisError("invalid_input",`Invalid ${label}.`);return x.trim();}
-export async function request(s:Workspace,input:any,actor="owner",now=Date.now()){
+export async function request(s:Workspace,input:any,actor="owner",now=Date.now(),risk?:RiskReview){
  await expire(s,now);if(s.payments.length>=1000)throw new AegisError("capacity","Prototype request capacity reached.",409);
  const agentId=clean(input.agent,"agent",64,/^[a-z0-9_-]+$/),recipient=clean(input.recipient,"recipient",64,/^[a-z0-9][a-z0-9._-]*[a-z0-9]$/),reference=clean(input.reference,"reference",100,/^[a-zA-Z0-9._:-]+$/),value=amount(input.amount),memo=String(input.memo??"").slice(0,500);
  if(actor!=="owner"&&actor!==agentId)throw new AegisError("agent_mismatch","An agent can only request its own payments.",403);
@@ -25,7 +27,8 @@ export async function request(s:Workspace,input:any,actor="owner",now=Date.now()
  const agent=s.agents.find(a=>a.id===agentId);if(!agent)throw new AegisError("unknown_agent","Agent not found.",404);
  const reserved=s.payments.filter(p=>p.status==="approval"&&p.expires>now).reduce((n,p)=>n+p.amount,0);
  const reason=s.paused?"Treasury is paused.":!agent.active?"Agent authorization has been revoked.":!s.policy.recipients.includes(recipient)?"Recipient is not on the owner's allowlist.":value>s.policy.perPayment?"Hard per-payment cap exceeded.":usage(s,now)+value>s.policy.daily?"Shared 24-hour budget exceeded.":usage(s,now,agentId)+value>agent.daily?"Agent 24-hour budget exceeded.":reserved+value>s.balance?"Insufficient unreserved treasury balance.":"";
- const p:Payment={id:crypto.randomUUID(),agent:agentId,recipient,amount:value,reference,memo,created:now,expires:now+s.policy.ttlMinutes*60_000,policyVersion:s.policy.version,fingerprint,status:reason?"blocked":value>s.policy.approvalAbove?"approval":"settled",reason:reason||(value>s.policy.approvalAbove?"Owner approval required. Budget reserved for this exact request.":"All policy checks passed. Sandbox ledger debited.")};if(p.status==="settled"){s.balance-=value;p.settled=now;}s.payments.push(p);await audit(s,actor,`payment.${p.status}`,p.reason,now,p.id);return{payment:p,replay:false,conflict:false};
+ const riskHold=s.riskRequired&&risk?.level!=='low';
+ const p:Payment={id:crypto.randomUUID(),agent:agentId,recipient,amount:value,reference,memo,created:now,expires:now+s.policy.ttlMinutes*60_000,policyVersion:s.policy.version,fingerprint,status:reason?"blocked":value>s.policy.approvalAbove||riskHold?"approval":"settled",reason:reason||(riskHold?"Context review requires owner approval. Budget reserved for this exact request.":value>s.policy.approvalAbove?"Owner approval required. Budget reserved for this exact request.":"All policy checks passed. Sandbox ledger debited."),...(risk?{risk}: {})};if(p.status==="settled"){s.balance-=value;p.settled=now;}s.payments.push(p);await audit(s,actor,`payment.${p.status}`,p.reason,now,p.id);return{payment:p,replay:false,conflict:false};
 }
 export async function approve(s:Workspace,id:string,fingerprint:string,accept:boolean,actor="owner",now=Date.now()){
  if(actor!=="owner")throw new AegisError("owner_required","Only the owner may approve requests.",403);await expire(s,now);const p=s.payments.find(p=>p.id===id);if(!p)throw new AegisError("unknown_request","Request not found.",404);if(p.status!=="approval")throw new AegisError("not_pending","This request is no longer awaiting approval.",409);if(p.fingerprint!==fingerprint)throw new AegisError("approval_mismatch","Approval does not match the exact payment.",409);
@@ -50,3 +53,4 @@ export async function lab(now=Date.now()):Promise<LabResult[]>{const rows:LabRes
  const good=await verify(s.audit);s.audit[0].detail="tampered";const bad=await verify(s.audit);add("audit","Audit tamper detection",good.valid&&!bad.valid,"Detect changes to the audit chain","Modified audit entry failed hash verification.");
  s=await createWorkspace(now);s.paused=true;r=await request(s,base,"procurement",now);add("pause","Treasury pause",r.payment.status==="blocked","Refuse execution while paused",r.payment.reason);return rows;
 }
+

@@ -1,0 +1,24 @@
+import {Account,JsonRpcProvider,getTransactionLastResult} from 'near-api-js';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {signedTransaction,foreignAddress,MPC_CONTRACT,MPC_PATH} from '../lib/chain-signatures.ts';
+import {nearRead} from '../lib/settlement.ts';
+const ownerKey=JSON.parse(await readFile('.local-keys/crosschain.json','utf8')),agentKey=JSON.parse(await readFile('.local-keys/crosschain-agent.json','utf8'));
+if(!ownerKey.account.endsWith('.testnet')||!agentKey.account.endsWith('.testnet'))throw Error('Testnet only.');
+const provider=new JsonRpcProvider({url:'https://rpc.testnet.near.org'}),owner=new Account(ownerKey.account,provider,ownerKey.privateKey),agent=new Account(agentKey.account,provider,agentKey.privateKey);
+const evidence={capturedAt:new Date().toISOString(),network:'NEAR testnet',destination:'Sepolia',contract:ownerKey.account,agent:agentKey.account,transactions:[],checks:[],notes:['MPC signature verification is distinct from destination settlement.','The derived Sepolia account requires test ETH before a transfer can be mined.','Test administrator and contract upgrade keys remain trusted.']};
+const save=()=>writeFile('public/evidence/chain-signatures.json',JSON.stringify(evidence,null,2));
+const reference=`verify-${Date.now().toString(36)}`;
+const current=(await nearRead(ownerKey.account,'get_config')).value;
+const normal={recipient:'0x1111111111111111111111111111111111111111',value:'1000000000000',max_fee_per_gas:'2000000000',priority_fee:'1000000000',nonce:current.next_nonce,reference};
+async function call(account,methodName,args,label,gas=50_000_000_000_000n){const tx=await account.callFunctionRaw({contractId:ownerKey.account,methodName,args,gas,deposit:0n,waitUntil:'FINAL'});evidence.transactions.push({label,hash:tx.transaction.hash});await save();return getTransactionLastResult(tx);}
+const bad=await call(agent,'request_evm',{...normal,recipient:'0x2222222222222222222222222222222222222222',reference:reference+'-substitution'},'Recipient substitution');evidence.checks.push({name:'recipient substitution',passed:bad.status==='Blocked'});
+const request=await call(agent,'request_evm',normal,'Permitted transfer requested');evidence.checks.push({name:'exact owner approval required',passed:request.status==='Approval'});
+const retry=await call(agent,'request_evm',normal,'Identical retry');evidence.checks.push({name:'idempotent retry',passed:retry.id===request.id&&retry.fingerprint===request.fingerprint});
+let denied=false;try{await call(agent,'approve_evm',{id:request.id,fingerprint:request.fingerprint},'Agent approval attempt',300_000_000_000_000n);}catch(e){denied=true;}evidence.checks.push({name:'agent cannot approve',passed:denied});await save();
+const signed=await call(owner,'approve_evm',{id:request.id,fingerprint:request.fingerprint},'Owner approval and MPC callback',300_000_000_000_000n);
+const key=(await nearRead(MPC_CONTRACT,'derived_public_key',{path:MPC_PATH,predecessor:ownerKey.account,key_version:0})).value;
+const verified=await signedTransaction(signed,key);
+evidence.publicKey=key;evidence.derivedAddress=foreignAddress(key);evidence.signedRequest=signed;evidence.signedTransactionHash=verified.hash;evidence.checks.push({name:'MPC signature recovers derived address',passed:verified.sender===evidence.derivedAddress});
+const code=await provider.query({request_type:'view_code',finality:'final',account_id:ownerKey.account});evidence.codeHash=code.hash;evidence.wasmSHA256=createHash('sha256').update(await readFile('contracts/aegis/target/wasm32-unknown-unknown/release/aegis_crosschain.wasm')).digest('hex');await save();
+console.log(JSON.stringify({contract:evidence.contract,address:evidence.derivedAddress,checks:evidence.checks,mpcTransaction:evidence.transactions.at(-1).hash,signatureStatus:signed.status}));
