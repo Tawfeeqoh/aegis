@@ -40,6 +40,7 @@ export function paymentPreview(s: Workspace, input: {agent: string; recipient: s
     : value + reserved > s.balance ? 'There are not enough unreserved funds.' : '';
   return reason ? {status: 'blocked', title: 'Will be blocked', detail: reason}
     : value > s.policy.approvalAbove ? {status: 'approval', title: 'Your approval is required', detail: `${money(value)} demo USD will be reserved for this request.`}
+    : s.riskRequired ? {status: 'draft', title: 'Context review comes next', detail: 'A warning or unavailable review requires your approval before the ledger can be debited.'}
     : {status: 'settled', title: 'Within the current rules', detail: 'Can settle automatically in the demo ledger.'};
 }
 

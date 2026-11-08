@@ -104,7 +104,7 @@ export default function Aegis({fixture}:{fixture?:string}) {
           {view === 'Policies' && <PolicyForm key={s.policy.version} s={s} busy={!!busy} save={p => act('policy', {policy: p}, 'Policy saved. Previous pending approvals were invalidated.')}/>}
           {view === 'Attack lab' && <AttackLab s={s} busy={busy} run={lab}/>}
           {view === 'Audit log' && <AuditLog s={s} busy={!!busy} act={act} select={setSelected}/>}
-          {view === 'Connections' && <Connections s={s} act={act} onState={setS}/>}
+          {view === 'Connections' && <Connections s={s} act={act} onState={setS} readOnly={!!fixture}/>}
           {view === 'Developer' && <Developer s={s} act={act} busy={!!busy}/>}
         </div><footer className="page-footer"><span><Mark/>AEGIS<span>Built by HACK1.0</span></span><span>Sandbox ledger · no real funds</span></footer></>}
       </main>
