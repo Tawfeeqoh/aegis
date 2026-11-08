@@ -828,6 +828,12 @@ td code {font-size: 10px; color: var(--faint);}
 @media (pointer:coarse) {input,select,textarea,.search input,.near-config input,.filter-selects select {font-size: 16px;} .text-btn {min-height: 44px;} .icon-btn {width: 44px;height: 44px;}}
 @media (prefers-reduced-transparency:reduce) {.glass,.sidebar,.mobile-drawer,.mobile-bottom-nav,.modal {background: #1d3233; backdrop-filter: none; -webkit-backdrop-filter: none;}}
 .connections-page {min-width:0;}
+.connection-switch {display:flex;gap:5px;padding:5px;margin:22px 0 0;background:#c4e2dd06;border:1px solid var(--border);border-radius:14px;max-width:470px;}
+.connection-switch button {min-height:44px;flex:1;border:0;border-radius:10px;background:transparent;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;transition:background 120ms,color 120ms;}
+.connection-switch button[aria-pressed=true] {background:#c4e2dd12;color:var(--text);}
+.connection-switch button:focus-visible {outline:2px solid var(--accent);outline-offset:2px;}
+.connections-page [hidden] {display:none;}
+.risk-review p,.risk-review small {overflow-wrap:anywhere;}
 .connection-section {align-items:start;}
 .connection-section h3 {font-size:15px;font-weight:550;}
 .connection-section .settings-fields p {max-width:none;font-size:13px;}
