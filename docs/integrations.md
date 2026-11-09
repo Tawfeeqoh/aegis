@@ -1,6 +1,6 @@
 # Integration status
 
-Updated 8 November 2026. The root README is the short introduction; this file records verification boundaries.
+Updated 9 November 2026. The root README is the short introduction; this file records verification boundaries.
 
 | Component | Implemented | Live verification | Still required |
 | --- | --- | --- | --- |
@@ -8,7 +8,7 @@ Updated 8 November 2026. The root README is the short introduction; this file re
 | Native NEAR treasury | Rust contract, wallet console, transfer callback | Deployed testnet contract; settled 0.12 test NEAR payment; prohibited recipient and shared-cap blocks | Fresh user-owned wallet test; custody audit |
 | NEAR Intents | Public live quotes; separate native NEAR allowance; exact route/minimum approval; owner wallet deposit; origin and destination receipt checks | Live 1Click quote from native NEAR to USDC on Base | Funded mainnet wallet test; hosted funding remains disabled |
 | Chain Signatures | Separate NEAR contract constructs native Sepolia transactions; scoped recipient and amount checks; owner approval; real MPC call; local signature recovery; broadcast and receipt adapters | Deployed contract and MPC signing evidence in `public/evidence/chain-signatures.json` | Derived address needs Sepolia test ETH; destination transfer not yet mined |
-| NEAR AI Cloud | Server-only provider call, validated response, advisory escalation, persistent call limit and review displayed with payment | Error, malformed response, hard-cap and fail-closed tests | API key with credits; live inference test; hardware-attestation verification |
+| NEAR AI Cloud | Server-only provider call, validated response, advisory escalation, persistent call limit and review displayed with payment | A live call from the protected preview returned HTTP 402. The sandbox payment stayed pending owner approval. | Inference credits, a successful live review and hardware-attestation verification |
 
 ## Evidence
 
