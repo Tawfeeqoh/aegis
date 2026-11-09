@@ -13,7 +13,7 @@ export default function HomePage() {
     <PublicHeader/>
     <main id="main">
       <section className="public-hero public-container">
-        <div className="hero-copy"><h1>Money needs rules.</h1><p className="hero-description">Financial control for AI agents. Set a budget, choose recipients and decide which payments need your approval.</p><div className="hero-actions"><Link className="public-button" href="/app">Get started<ArrowUpRight size={18}/></Link><Link className="public-text-link" href="/docs">Read the docs<ArrowRight size={17}/></Link></div><p className="hero-note">Start with a demo treasury. No wallet needed.</p><div className="hero-authority"><ShieldCheck size={19}/><p>The agent makes the request.<br/>Your rules decide what happens next.</p></div></div>
+        <div className="hero-copy"><h1>Money needs rules.</h1><p className="hero-description">Financial control for AI agents. Set a budget, choose recipients and decide which payments need your approval.</p><div className="hero-actions"><Link className="public-button" href="/app">Get started<ArrowUpRight size={18}/></Link><Link className="public-text-link" href="/docs">Read the docs<ArrowRight size={17}/></Link></div><p className="hero-note">Start with a demo treasury. No wallet needed.</p><div className="hero-authority"><ShieldCheck size={19}/><p>The agent makes the request.<br/> Your rules decide what happens next.</p></div></div>
         <div className="hero-example"><span className="hero-shield"><PublicMark/></span><PolicyExample/></div>
       </section>
 
@@ -33,7 +33,7 @@ export default function HomePage() {
           <article data-reveal><div><h3>NEAR treasury</h3><span className="public-state live">Testnet</span></div><p>A deployed contract enforces spending limits and confirms native test NEAR transfers through settlement callbacks.</p><Link href="/docs#near-treasury">Contract and evidence<ArrowUpRight size={16}/></Link></article>
           <article data-reveal><div><h3>Chain Signatures</h3><span className="public-state live">Signature verified</span></div><p>A separate contract requests MPC signatures for approved Sepolia transfers. Destination settlement still needs test funds.</p><Link href="/docs#chain-signatures">Signing flow<ArrowUpRight size={16}/></Link></article>
           <article data-reveal><div><h3>NEAR Intents</h3><span className="public-state">Live quotes</span></div><p>Get NEAR-to-USDC quotes for Base or Ethereum. Mainnet funding stays disabled until the funded flow has been verified.</p><Link href="/docs#intents">Quote and deposit flow<ArrowUpRight size={16}/></Link></article>
-          <article data-reveal><div><h3>NEAR AI Cloud</h3><span className="public-state setup">Setup needed</span></div><p>Context review is implemented. A live inference test needs an API key with credits; hardware attestation is not verified.</p><Link href="/docs#risk-review">Review behaviour<ArrowUpRight size={16}/></Link></article>
+          <article data-reveal><div><h3>NEAR AI Cloud</h3><span className="public-state">Optional review</span></div><p>Review the purpose of a sandbox payment before it proceeds. Warnings and unavailable reviews require owner approval.</p><Link href="/docs#risk-review">Review behaviour<ArrowUpRight size={16}/></Link></article>
         </div>
         <p className="public-scope-note">The workspace uses fictional demo USD. Native test NEAR and mainnet funds are separate. AEGIS is a hackathon prototype.</p>
       </section>

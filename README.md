@@ -24,7 +24,7 @@ The native treasury is deployed at `treasury.aegis-hack10-261106.testnet`. It ha
 
 The Chain Signatures contract is `aegis-chain-mw7yr2zc.testnet`. It builds a native Sepolia transfer, checks the allowance, and asks NEAR's MPC network to sign after owner approval. A signature and a settled transfer are shown as separate states.
 
-NEAR Intents supplies live NEAR-to-USDC quotes. Mainnet funding is disabled on the hosted app until the funded wallet flow has been verified. The NEAR AI Cloud connection is written, but needs an API key and credits for a live inference test.
+NEAR Intents supplies live NEAR-to-USDC quotes. Mainnet funding is disabled on the hosted app until the funded wallet flow has been verified. NEAR AI Cloud can review the purpose of a sandbox payment. Warnings and unavailable reviews go to the owner.
 
 The dashboard uses fictional demo USD. The native treasury uses test NEAR. Neither funds an Intents swap.
 
